@@ -1,0 +1,163 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: styledecor --default
+}
+
+/* ===== Custom DaisyUI Theme ===== */
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/* DaisyUI Theme Definition */
+@plugin "daisyui/theme" {
+  name: "styledecor";
+  default: true;
+  color-scheme: dark;
+  --color-base-100: #0f0f1a;
+  --color-base-200: #1a1a2e;
+  --color-base-300: #16213e;
+  --color-base-content: #e8e6e3;
+  --color-primary: #d4af37;
+  --color-primary-content: #0f0f1a;
+  --color-secondary: #c084fc;
+  --color-secondary-content: #0f0f1a;
+  --color-accent: #38bdf8;
+  --color-accent-content: #0f0f1a;
+  --color-neutral: #2a2a3e;
+  --color-neutral-content: #e8e6e3;
+  --color-info: #38bdf8;
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --radius-btn: 0.5rem;
+  --radius-box: 0.75rem;
+}
+
+/* ===== Global Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0f0f1a;
+  color: #e8e6e3;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ===== Scrollbar Styles ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a230;
+}
+
+/* ===== Glass Effect Utility ===== */
+.glass-card {
+  background: rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 0.75rem;
+}
+
+.glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.1);
+}
+
+/* ===== Gradient Backgrounds ===== */
+.gradient-hero {
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 70%, #0f0f1a 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #d4af37 0%, #c9a230 50%, #b8942a 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #d4af37, #fde68a, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Animation Utilities ===== */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 2s ease-in-out infinite;
+}
+
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0); }
+}
+
+/* ===== Skeleton Loader ===== */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #1a1a2e 25%, #2a2a3e 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== Status Badge Colors ===== */
+.badge-pending { background-color: #fbbf24; color: #0f0f1a; }
+.badge-confirmed { background-color: #38bdf8; color: #0f0f1a; }
+.badge-in-progress { background-color: #c084fc; color: #0f0f1a; }
+.badge-completed { background-color: #4ade80; color: #0f0f1a; }
+.badge-cancelled { background-color: #f87171; color: #0f0f1a; }
+
+/* ===== Section Spacing ===== */
+.section-padding {
+  padding: 5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 6rem 2rem;
+  }
+}
+
+/* ===== Container ===== */
+.container-custom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-custom {
+    padding: 0 2rem;
+  }
+}
