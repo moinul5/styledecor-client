@@ -1,12 +1,9 @@
+import { Navigate } from 'react-router';
+
+// The Analytics charts have been integrated directly into the AdminDashboard for a better UX.
+// We redirect this route to the Admin Dashboard to prevent dead links.
 const Analytics = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold font-serif mb-6">Revenue <span className="gradient-text">Analytics</span></h1>
-      <div className="text-base-content/40 py-10">
-        <p>Analytics page — Full implementation in Milestone 11</p>
-      </div>
-    </div>
-  );
+  return <Navigate to="/dashboard/admin" replace />;
 };
 
 export default Analytics;
