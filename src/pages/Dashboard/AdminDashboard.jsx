@@ -13,7 +13,9 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend
+  Legend,
+  LineChart,
+  Line
 } from 'recharts';
 
 const COLORS = ['#d4af37', '#0f0f1a', '#facc15', '#38bdf8', '#a855f7', '#4ade80'];
@@ -65,6 +67,16 @@ const AdminDashboard = () => {
     { title: 'Total Users', value: stats?.usersCount || 0, icon: <FiUsers size={24} />, color: 'text-primary' },
     { title: 'Active Services', value: stats?.servicesCount || 0, icon: <FiBox size={24} />, color: 'text-info' },
     { title: 'Total Bookings', value: stats?.bookingsCount || 0, icon: <FiCalendar size={24} />, color: 'text-secondary' },
+  ];
+
+  // Mock data for Bookings over time (since backend endpoint wasn't explicitly defined for this array)
+  const bookingsOverTime = [
+    { name: 'Jan', bookings: 12 },
+    { name: 'Feb', bookings: 19 },
+    { name: 'Mar', bookings: 15 },
+    { name: 'Apr', bookings: 22 },
+    { name: 'May', bookings: 28 },
+    { name: 'Jun', bookings: 25 },
   ];
 
   return (
@@ -148,6 +160,32 @@ const AdminDashboard = () => {
                   />
                   <Legend verticalAlign="bottom" height={36} iconType="circle" />
                 </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Bookings Trend Chart */}
+        <div className="mt-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass-card p-6 h-[400px] flex flex-col"
+          >
+            <h3 className="font-bold mb-6 border-b border-base-300 pb-2">Bookings Trend (Last 6 Months)</h3>
+            <div className="flex-1 w-full h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={bookingsOverTime}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" />
+                  <XAxis dataKey="name" stroke="#a6adbb" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#a6adbb" fontSize={12} tickLine={false} axisLine={false} />
+                  <RechartsTooltip 
+                    contentStyle={{ backgroundColor: '#0f0f1a', border: '1px solid #1a1a2e', borderRadius: '8px' }}
+                    itemStyle={{ color: '#38bdf8' }}
+                  />
+                  <Line type="monotone" dataKey="bookings" stroke="#38bdf8" strokeWidth={3} dot={{ r: 6, fill: '#38bdf8' }} activeDot={{ r: 8 }} />
+                </LineChart>
               </ResponsiveContainer>
             </div>
           </motion.div>
