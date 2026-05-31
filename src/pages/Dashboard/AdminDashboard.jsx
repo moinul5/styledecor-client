@@ -2,56 +2,74 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { FiUsers, FiBox, FiCalendar, FiDollarSign } from 'react-icons/fi';
 import { motion } from 'motion/react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from 'recharts';
+
+const COLORS = ['#d4af37', '#0f0f1a', '#facc15', '#38bdf8', '#a855f7', '#4ade80'];
 
 const AdminDashboard = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading: loadingStats } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      // In a real app, you'd have an /analytics route for this.
-      // Here we'll fetch collections to get counts (for demonstration).
-      const [users, services, bookings] = await Promise.all([
-        axiosSecure.get('/users'),
-        axiosSecure.get('/services?limit=1000'),
-        axiosSecure.get('/bookings'),
-      ]);
-
-      const totalRevenue = bookings.data.reduce((sum, b) => {
-        // Assuming paid bookings contribute to revenue
-        return b.paymentStatus === 'paid' ? sum + 100 : sum; // Mocking $100 per paid booking just for display if real price isn't there
-      }, 0);
-
-      return {
-        usersCount: users.data.length,
-        servicesCount: services.data.services?.length || 0,
-        bookingsCount: bookings.data.length,
-        revenue: totalRevenue || 12500 // Mock fallback
-      };
+      const res = await axiosSecure.get('/analytics/stats');
+      return res.data;
     }
   });
 
-  if (isLoading) {
+  const { data: demandData = [], isLoading: loadingDemand } = useQuery({
+    queryKey: ['admin-demand'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/analytics/service-demand');
+      return res.data;
+    }
+  });
+
+  const { data: revenueData = [], isLoading: loadingRevenue } = useQuery({
+    queryKey: ['admin-revenue'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/analytics/revenue');
+      return res.data;
+    }
+  });
+
+  if (loadingStats || loadingDemand || loadingRevenue) {
     return (
       <div className="p-4 md:p-8">
         <h1 className="text-3xl font-bold font-serif mb-8">Dashboard Overview</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[1, 2, 3, 4].map(n => <div key={n} className="h-32 skeleton-shimmer rounded-xl"></div>)}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="h-96 skeleton-shimmer rounded-xl"></div>
+          <div className="h-96 skeleton-shimmer rounded-xl"></div>
         </div>
       </div>
     );
   }
 
   const statCards = [
-    { title: 'Total Revenue', value: `$${stats?.revenue?.toLocaleString()}`, icon: <FiDollarSign size={24} />, color: 'text-success' },
-    { title: 'Total Users', value: stats?.usersCount, icon: <FiUsers size={24} />, color: 'text-primary' },
-    { title: 'Active Services', value: stats?.servicesCount, icon: <FiBox size={24} />, color: 'text-info' },
-    { title: 'Total Bookings', value: stats?.bookingsCount, icon: <FiCalendar size={24} />, color: 'text-secondary' },
+    { title: 'Total Revenue', value: `$${stats?.totalRevenue?.toLocaleString() || 0}`, icon: <FiDollarSign size={24} />, color: 'text-success' },
+    { title: 'Total Users', value: stats?.usersCount || 0, icon: <FiUsers size={24} />, color: 'text-primary' },
+    { title: 'Active Services', value: stats?.servicesCount || 0, icon: <FiBox size={24} />, color: 'text-info' },
+    { title: 'Total Bookings', value: stats?.bookingsCount || 0, icon: <FiCalendar size={24} />, color: 'text-secondary' },
   ];
 
   return (
     <div className="p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         <h1 className="text-3xl font-bold font-serif mb-8">Admin Overview</h1>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -74,13 +92,65 @@ const AdminDashboard = () => {
           ))}
         </div>
 
+        {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="glass-card p-6 h-96 flex flex-col items-center justify-center text-base-content/40">
-            <p>Revenue Chart (Placeholder)</p>
-          </div>
-          <div className="glass-card p-6 h-96 flex flex-col items-center justify-center text-base-content/40">
-            <p>Recent Activity (Placeholder)</p>
-          </div>
+          {/* Revenue Chart */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="glass-card p-6 h-[400px] flex flex-col"
+          >
+            <h3 className="font-bold mb-6 border-b border-base-300 pb-2">Revenue Overview</h3>
+            <div className="flex-1 w-full h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={revenueData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" />
+                  <XAxis dataKey="name" stroke="#a6adbb" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#a6adbb" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
+                  <RechartsTooltip 
+                    cursor={{fill: '#ffffff0d'}}
+                    contentStyle={{ backgroundColor: '#0f0f1a', border: '1px solid #1a1a2e', borderRadius: '8px' }}
+                    itemStyle={{ color: '#d4af37' }}
+                  />
+                  <Bar dataKey="revenue" fill="#d4af37" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+
+          {/* Service Demand Chart */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="glass-card p-6 h-[400px] flex flex-col"
+          >
+            <h3 className="font-bold mb-6 border-b border-base-300 pb-2">Service Category Demand</h3>
+            <div className="flex-1 w-full h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={demandData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={120}
+                    innerRadius={60}
+                    fill="#8884d8"
+                    dataKey="value"
+                    paddingAngle={5}
+                  >
+                    {demandData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip 
+                    contentStyle={{ backgroundColor: '#0f0f1a', border: '1px solid #1a1a2e', borderRadius: '8px' }}
+                  />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

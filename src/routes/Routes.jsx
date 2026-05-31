@@ -10,9 +10,9 @@ import Services from '../pages/Services/Services';
 import ServiceDetails from '../pages/Services/ServiceDetails';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
-import About from '../pages/About/About';
-import Contact from '../pages/Contact/Contact';
-import CoverageMap from '../pages/CoverageMap/CoverageMap';
+import About from '../pages/Home/About';
+import Contact from '../pages/Home/Contact';
+import CoverageMap from '../components/shared/CoverageMap';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
 // Protected Pages
