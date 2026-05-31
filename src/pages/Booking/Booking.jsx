@@ -9,8 +9,9 @@ import CheckoutForm from '../../components/shared/CheckoutForm';
 import { FiCalendar, FiMapPin, FiMonitor, FiArrowLeft } from 'react-icons/fi';
 import { motion } from 'motion/react';
 
-// TODO: Replace with real publishable key
-const stripePromise = loadStripe('pk_test_placeholder_key_replace_me');
+// Use environment variable for Stripe key, with fallback for safety if not configured
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder_key_replace_me';
+const stripePromise = loadStripe(stripeKey);
 
 const Booking = () => {
   const { serviceId } = useParams();
