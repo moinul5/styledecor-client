@@ -1,13 +1,15 @@
 import { Outlet } from 'react-router';
+import Navbar from '../components/shared/Navbar';
+import Footer from '../components/shared/Footer';
 
 const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-base-100">
-      {/* Navbar will be added in Milestone 2 */}
+      <Navbar />
       <main className="flex-1">
         <Outlet />
       </main>
-      {/* Footer will be added in Milestone 2 */}
+      <Footer />
     </div>
   );
 };
