@@ -81,14 +81,14 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 pb-20">
+    <div className="min-h-screen ">
       {/* Page Header */}
-      <section className="pt-32 pb-16 gradient-hero border-b border-base-300">
+      <section className="pt-3 pb-16 gradient-hero border-b border-base-300 mt-20 mb-10">
         <div className="container-custom text-center relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif mb-4">
             Our Premium <span className="gradient-text">Services</span>
           </h1>
-          <p className="text-base-content/60 max-w-2xl mx-auto text-lg">
+          <p className="text-base-content/60 max-w-2xl mx-auto  text-lg">
             Explore our curated selection of decoration packages. Find the perfect aesthetic for your next event or space.
           </p>
         </div>

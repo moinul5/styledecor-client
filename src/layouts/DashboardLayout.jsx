@@ -62,7 +62,7 @@ const DashboardLayout = () => {
   const menuItems = getMenuItems();
 
   return (
-    <div className="min-h-screen flex bg-base-100">
+    <div className="min-h-screen flex bg-base-100 text-base-content">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -73,15 +73,15 @@ const DashboardLayout = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-base-200 border-r border-base-300 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-base-200/95 border-r border-base-300 shadow-xl shadow-black/10 transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-base-300">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold gradient-text font-serif">StyleDecor</h2>
+          <div className="p-7 border-b border-base-300">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-xl font-bold gradient-text font-serif tracking-wide">StyleDecor</h2>
               <button
                 className="btn btn-ghost btn-sm lg:hidden"
                 onClick={() => setSidebarOpen(false)}
@@ -90,9 +90,9 @@ const DashboardLayout = () => {
               </button>
             </div>
             {/* User info */}
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-5 flex items-center gap-3">
               <div className="avatar">
-                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <div className="w-11 h-11 rounded-full ring ring-primary/30 ring-offset-base-100 ring-offset-2">
                   <img
                     src={user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'U'}&background=d4af37&color=0f0f1a`}
                     alt={user?.displayName}
@@ -107,16 +107,16 @@ const DashboardLayout = () => {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 p-5 space-y-2 overflow-y-auto">
             {menuItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                  `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 ${
                     isActive
-                      ? 'bg-primary/10 text-primary border-l-4 border-primary'
+                      ? 'bg-primary/15 text-primary border-l-4 border-primary shadow-sm'
                       : 'text-base-content/70 hover:bg-base-300 hover:text-base-content'
                   }`
                 }
@@ -128,17 +128,17 @@ const DashboardLayout = () => {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-base-300 space-y-2">
+          <div className="p-5 border-t border-base-300 space-y-3">
             <NavLink
               to="/"
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-base-content/70 hover:bg-base-300 hover:text-base-content transition-all duration-200"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-base-content/70 hover:bg-base-300 hover:text-base-content transition-all duration-200"
             >
               <FiHome className="text-lg" />
               <span className="text-sm font-medium">Back to Home</span>
             </NavLink>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-error/70 hover:bg-error/10 hover:text-error transition-all duration-200 w-full"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-error/70 hover:bg-error/10 hover:text-error transition-all duration-200 w-full"
             >
               <FiLogOut className="text-lg" />
               <span className="text-sm font-medium">Logout</span>
@@ -150,8 +150,8 @@ const DashboardLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-base-200/80 backdrop-blur-md border-b border-base-300 px-6 py-4">
-          <div className="flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-base-200/95 backdrop-blur-xl border-b border-base-300 px-6 py-4 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
             <button
               className="btn btn-ghost btn-sm lg:hidden"
               onClick={() => setSidebarOpen(true)}
@@ -160,13 +160,13 @@ const DashboardLayout = () => {
             </button>
             <div className="flex items-center gap-4 ml-auto">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium">{user?.displayName}</p>
+                <p className="text-sm font-semibold">{user?.displayName}</p>
                 <p className="text-xs text-base-content/50">
                   {isAdmin ? 'Administrator' : isDecorator ? 'Decorator' : 'Member'}
                 </p>
               </div>
               <div className="avatar">
-                <div className="w-9 rounded-full">
+                <div className="w-10 h-10 rounded-full ring ring-primary/25">
                   <img
                     src={user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'U'}&background=d4af37&color=0f0f1a`}
                     alt={user?.displayName}

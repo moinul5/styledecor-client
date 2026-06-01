@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import useAuth from '../../hooks/useAuth';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
-import { FiMail, FiPhone, FiStar, FiAward, FiEdit2 } from 'react-icons/fi';
-import { motion } from 'motion/react';
+import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { FiMail, FiPhone, FiCalendar, FiShield, FiEdit2 } from "react-icons/fi";
 
 const UserProfile = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: dbUser, isLoading, refetch } = useQuery({
-    queryKey: ['user', user?.email],
+  const { data: dbUser, isLoading } = useQuery({
+    queryKey: ["user", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user.email}`);
@@ -20,113 +18,214 @@ const UserProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="skeleton-shimmer h-64 w-full rounded-2xl mb-8"></div>
-        <div className="skeleton-shimmer h-8 w-1/3 mb-4"></div>
-        <div className="skeleton-shimmer h-4 w-1/2"></div>
+      <div className="p-8 space-y-4 max-w-4xl mx-auto">
+        <div className="skeleton h-8 w-40 rounded-xl mb-2"></div>
+        <div className="skeleton h-[140px] rounded-t-3xl"></div>
+        <div className="skeleton h-64 rounded-b-3xl"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold font-serif mb-8">My Profile</h1>
+    <div className="min-h-screen">
+      <div className="px-8 lg:px-12 py-10 max-w-5xl mx-auto">
+
+        {/* Breadcrumb */}
+        <div className="mb-5 flex items-center gap-2 text-xs text-base-content/40 uppercase tracking-widest">
+          <span>Dashboard</span>
+          <span>›</span>
+          <span className="text-base-content/70">My Profile</span>
+        </div>
+
+        {/* Page Title */}
+        <h1 className="text-3xl font-semibold font-serif mb-6 text-base-content">
+          My Profile
+        </h1>
 
         {/* Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-card overflow-hidden"
-        >
-          {/* Header Background */}
-          <div className="h-32 bg-gradient-to-r from-primary/40 to-secondary/40 relative">
-            <div className="absolute inset-0 bg-base-100/30 backdrop-blur-sm" />
+        <div className="rounded-2xl overflow-hidden border border-base-content/10 bg-base-100 shadow-sm">
+
+          {/* Cover */}
+          <div
+            className="relative h-36"
+            style={{
+              background:
+                "linear-gradient(120deg, #7F77DD 0%, #AFA9EC 60%, #FAC775 100%)",
+            }}
+          >
+            <button className="absolute top-4 right-4 flex items-center gap-2 bg-base-100 hover:bg-base-200 transition-colors border border-base-content/15 text-base-content text-sm font-medium px-4 py-2 rounded-xl shadow-sm">
+              <FiEdit2 size={14} />
+              Edit profile
+            </button>
           </div>
 
-          {/* Content */}
-          <div className="px-6 sm:px-10 pb-10 relative">
-            {/* Avatar */}
-            <div className="flex justify-between items-start -mt-16 mb-6">
-              <div className="w-32 h-32 rounded-full ring-4 ring-base-100 overflow-hidden bg-base-200">
+          {/* Body */}
+          <div className="px-6 lg:px-8 pb-8 bg-base-100">
+
+            {/* Identity Row — avatar overlaps cover by 44px */}
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-11 mb-7">
+              {/* Avatar */}
+              <div
+                className="w-[88px] h-[88px] rounded-full overflow-hidden border-[3px] border-base-100 bg-base-200 shrink-0 shadow"
+                style={{ zIndex: 10, position: "relative" }}
+              >
                 <img
-                  src={user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'User'}&background=d4af37&color=0f0f1a&bold=true`}
-                  alt={user?.displayName}
+                  src={
+                    user?.photoURL ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      user?.displayName || "User"
+                    )}&background=7F77DD&color=fff&size=88`
+                  }
+                  alt={user?.displayName || "User avatar"}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <button className="btn btn-primary btn-sm px-6">
-                <FiEdit2 size={14} /> Edit Profile
-              </button>
+
+              {/* Name + tagline — pushed down to align with bottom of avatar */}
+              <div className="pb-1 pt-12 sm:pt-0">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <h2 className="text-xl font-semibold text-base-content">
+                    {user?.displayName || "User"}
+                  </h2>
+                  <span
+                    className="text-[11px] font-medium px-3 py-1 rounded-full"
+                    style={{
+                      background: "#EEEDFE",
+                      color: "#534AB7",
+                      letterSpacing: "0.3px",
+                    }}
+                  >
+                    {dbUser?.role
+                      ? dbUser.role.charAt(0).toUpperCase() + dbUser.role.slice(1)
+                      : "User"}
+                  </span>
+                </div>
+                <p className="text-sm text-base-content/50">
+                  Welcome back. Review your account info and keep your contact
+                  details up to date.
+                </p>
+              </div>
             </div>
 
-            {/* Info */}
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <h2 className="text-2xl font-bold font-serif">{user?.displayName}</h2>
-                <span className={`badge ${dbUser?.role === 'admin' ? 'badge-secondary' : dbUser?.role === 'decorator' ? 'badge-accent' : 'badge-primary'} badge-sm`}>
-                  {dbUser?.role || 'user'}
-                </span>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                {/* Contact Info */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-base-content/50 border-b border-base-300 pb-2">Contact Information</h3>
-                  
-                  <div className="flex items-center gap-4 p-3 rounded-xl bg-base-200/50">
-                    <div className="w-10 h-10 rounded-lg bg-base-300 flex items-center justify-center text-primary shrink-0">
-                      <FiMail size={18} />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-xs text-base-content/50 font-medium">Email Address</p>
-                      <p className="text-sm font-semibold truncate">{user?.email}</p>
-                    </div>
-                  </div>
+            {/* Divider */}
+            <div className="border-t border-base-content/10 mb-6" />
 
-                  <div className="flex items-center gap-4 p-3 rounded-xl bg-base-200/50">
-                    <div className="w-10 h-10 rounded-lg bg-base-300 flex items-center justify-center text-primary shrink-0">
-                      <FiPhone size={18} />
-                    </div>
-                    <div>
-                      <p className="text-xs text-base-content/50 font-medium">Phone Number</p>
-                      <p className="text-sm font-semibold">{dbUser?.phone || 'Not provided'}</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Info Grid */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
-                {/* Account Details */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-base-content/50 border-b border-base-300 pb-2">Account Details</h3>
-                  
-                  <div className="flex items-center gap-4 p-3 rounded-xl bg-base-200/50">
-                    <div className="w-10 h-10 rounded-lg bg-base-300 flex items-center justify-center text-primary shrink-0">
-                      <FiAward size={18} />
+              {/* Contact Information */}
+              <div className="rounded-xl border border-base-content/10 bg-base-200/40 p-5">
+                <p className="text-[11px] font-medium uppercase tracking-widest text-base-content/40 mb-4">
+                  Contact information
+                </p>
+
+                <div className="space-y-3">
+                  {/* Email */}
+                  <div className="flex items-center gap-3 py-3 border-b border-base-content/10">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: "#EEEDFE" }}
+                    >
+                      <FiMail size={16} style={{ color: "#534AB7" }} />
                     </div>
-                    <div>
-                      <p className="text-xs text-base-content/50 font-medium">Member Since</p>
-                      <p className="text-sm font-semibold">
-                        {dbUser?.createdAt ? new Date(dbUser.createdAt).toLocaleDateString() : 'Recently'}
+                    <div className="min-w-0">
+                      <p className="text-[11px] text-base-content/40 mb-0.5">
+                        Email address
+                      </p>
+                      <p className="text-sm font-medium text-base-content break-all">
+                        {user?.email}
                       </p>
                     </div>
                   </div>
 
-                  {dbUser?.role === 'decorator' && (
-                    <div className="flex items-center gap-4 p-3 rounded-xl bg-base-200/50">
-                      <div className="w-10 h-10 rounded-lg bg-base-300 flex items-center justify-center text-primary shrink-0">
-                        <FiStar size={18} />
-                      </div>
-                      <div>
-                        <p className="text-xs text-base-content/50 font-medium">Specialty</p>
-                        <p className="text-sm font-semibold">{dbUser?.specialty || 'General Decoration'}</p>
-                      </div>
+                  {/* Phone */}
+                  <div className="flex items-center gap-3 py-2">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: "#EEEDFE" }}
+                    >
+                      <FiPhone size={16} style={{ color: "#534AB7" }} />
                     </div>
-                  )}
+                    <div>
+                      <p className="text-[11px] text-base-content/40 mb-0.5">
+                        Phone number
+                      </p>
+                      <p
+                        className={`text-sm font-medium ${
+                          dbUser?.phone
+                            ? "text-base-content"
+                            : "text-base-content/40"
+                        }`}
+                      >
+                        {dbUser?.phone || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Account Details */}
+              <div className="rounded-xl border border-base-content/10 bg-base-200/40 p-5">
+                <p className="text-[11px] font-medium uppercase tracking-widest text-base-content/40 mb-4">
+                  Account details
+                </p>
+
+                <div className="space-y-3">
+                  {/* Member Since */}
+                  <div className="flex items-center gap-3 py-3 border-b border-base-content/10">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: "#EEEDFE" }}
+                    >
+                      <FiCalendar size={16} style={{ color: "#534AB7" }} />
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-base-content/40 mb-0.5">
+                        Member since
+                      </p>
+                      <p className="text-sm font-medium text-base-content">
+                        {dbUser?.createdAt
+                          ? new Date(dbUser.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )
+                          : "Recently joined"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Account Status */}
+                  <div className="flex items-center gap-3 py-2">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: "#EEEDFE" }}
+                    >
+                      <FiShield size={16} style={{ color: "#534AB7" }} />
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-base-content/40 mb-0.5">
+                        Account status
+                      </p>
+                      <p className="text-sm font-medium text-base-content flex items-center gap-1.5">
+                        <span
+                          className="inline-block w-2 h-2 rounded-full"
+                          style={{ background: "#1D9E75" }}
+                        />
+                        Active
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-        </motion.div>
+        </div>
+
       </div>
     </div>
   );

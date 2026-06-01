@@ -20,7 +20,7 @@ const CoverageMap = () => {
   ];
 
   return (
-    <div className="w-full h-96 md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-base-300 z-0 relative">
+    <div className="w-full mt-20 h-96 md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-base-300 z-0 relative">
       <MapContainer 
         center={centerPosition} 
         zoom={11} 
