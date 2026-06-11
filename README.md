@@ -2,6 +2,13 @@
 
 A premium full-stack decoration service booking platform built with React, Vite, TailwindCSS v4, DaisyUI, and Firebase Authentication.
 
+#Admin id pass
+- ```bash
+   admin@styledecor.com
+   ```
+```bash
+   Admin@123
+   ```
 ## Features
 - **Role-Based Dashboards**: Distinct, protected views for Users, Decorators, and Admins.
 - **Premium UI/UX**: Dark luxury theme featuring glassmorphism, smooth Framer Motion animations, and custom gradients.
