@@ -3,7 +3,7 @@
 A premium full-stack decoration service booking platform built with React, Vite, TailwindCSS v4, DaisyUI, and Firebase Authentication.
 
 #Admin id pass
-- ```bash
+ ```bash
    admin@styledecor.com
    ```
 ```bash
